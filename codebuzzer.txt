@@ -1,0 +1,5 @@
+1 bip long: initialisation complète
+
+2 bips courts: flash fail
+3 bip courts: SD fail
+?
