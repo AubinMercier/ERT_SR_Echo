@@ -36,8 +36,14 @@ void setup()
   }
 
   // Transfer buffer 1 to page 7.
+  dataflash.waitUntilReady();
   dataflash.bufferToPage(1, 7);
-
+Serial.print("The test = ");
+dataflash.pageToBuffer(0, 1);
+dataflash.bufferRead(1, 0);
+Serial.print(SPI.transfer(0xff));
+Serial.print(SPI.transfer(0xff));
+Serial.println("");
   // Read page 7.
   dataflash.pageRead(7, 0);
   for(int i=0; i<DF_45DB161_PAGESIZE; i++)
