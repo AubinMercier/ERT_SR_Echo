@@ -55,7 +55,7 @@ void loop() {
     mpu.recordData(&d);  mpu.printdata(&d);
     bmp.recordData(&d);   bmp.printData(&d);
     //envoyer memoire et SD
-    sd.printData(&d);
+    sd.printData(micros(), &d);
     //envoyer XBee
     XBeeTX.sendData(&d);
 
@@ -87,7 +87,7 @@ void loop() {
     mpu.recordData(&d);  // mpu.printdata(&d);
     bmp.recordData(&d);  // bmp.printData(&d); 
     //envoyer memoire et SD
-    sd.printData(&d);
+    sd.printData(micros(), &d);
     //envoyer XBee
     XBeeTX.sendData(&d);
     
@@ -119,7 +119,7 @@ void loop() {
     mpu.recordData(&d);  // mpu.printdata(&d);
     bmp.recordData(&d);  // bmp.printData(&d); 
     //envoyer memoire et SD
-    sd.printData(&d);
+    sd.printData(micros(), &d);
     //envoyer XBee
     XBeeTX.sendData(&d);
     //detection second recovery event
@@ -142,7 +142,7 @@ void loop() {
     mpu.recordData(&d);  // mpu.printdata(&d);
     bmp.recordData(&d);  // bmp.printData(&d); 
     //envoyer memoire et SD
-    sd.printData(&d);
+    sd.printData(micros(), &d);
     //envoyer XBee
     XBeeTX.sendData(&d);
     //detection touchdown
