@@ -8,7 +8,7 @@ class SDCard {
   void setupSDCard();
   void createFile();
   void printData (unsigned long t, Data* d);
-  void printState(unsigned long state);
+  void printState(int state);
   void closeFile();
   private:
   const int chipSelect = BUILTIN_SDCARD;
