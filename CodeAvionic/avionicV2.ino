@@ -36,6 +36,7 @@ void setup() {
   XBeeTX.setXBee(RXPIN,TXPIN);
   sd.setupSDCard();
   sd.createFile();
+  sd.printState(1);
   Serial.begin(BAUDRATE);
   pinMode(buzzer,OUTPUT);
   tone(buzzer,1000);
@@ -72,6 +73,7 @@ void loop() {
     break;
   case LIFTOFF:
     //ligne lift-off sur memoire
+    sd.printState(2);
     
     unsigned long T_liftoff = millis();
     State = ASCENT;
@@ -105,6 +107,7 @@ void loop() {
     break;
   case APOGEE:
     //ligne apogee memoire
+    sd.printState(3);
     //trigger first recovery event
     break;
   case DESCENT1:
@@ -128,6 +131,7 @@ void loop() {
     break;
   case RECOVERYEVENT:
     //ligne second recovery event
+    sd.printState(4);
     break;
   case DESCENT2:
     //enregistrement 100Hz
@@ -148,8 +152,10 @@ void loop() {
     }while(currentTime < beginTime+deltaT);
     break;
   case TOUCHDOWN:
-    sd.closeFile();
+    sd.printState(5);
     //transfert flash vers SD
+          
+    sd.closeFile();
     tone(buzzer,1000);
     delay(3000);
     noTone(buzzer);
