@@ -15,7 +15,14 @@ SDCard sd;
 XBee_TX XBeeTX(RXPIN,TXPIN);
 double lastLoop = millis();
 double curTime(0);
+
 unsigned long currentTime;
+unsigned long deltaT;
+unsigned long beginTime;
+unsigned long T_liftoff;
+double normeAcc;
+double normeDecollage;
+unsigned long T_ascent;
 
 enum {
     WAITING,
@@ -48,8 +55,8 @@ void loop() {
   switch (State) {
   case WAITING:
     //enregistrement 50Hz
-    unsigned long deltaT = 20000;//intervalle d'un cycle en microsecondes
-    unsigned long beginTime = micros();
+    deltaT = 20000;//intervalle d'un cycle en microsecondes
+    beginTime = micros();
 
     //lire capteur
     mpu.recordData(&d);  mpu.printdata(&d);
@@ -60,10 +67,10 @@ void loop() {
     XBeeTX.sendData(&d);
 
     //detection lift-off
-    double normeAcc = sqrt(pow(d.acceleration[0],2)+pow(d.acceleration[1],2)+pow(d.acceleration[2],2));
-    double normeDecollage = ; //insérer norme
+    normeAcc = sqrt(pow(d.acceleration[0],2)+pow(d.acceleration[1],2)+pow(d.acceleration[2],2));
+    normeDecollage = 9999999999; //insérer norme
     if(normeAcc>normeDecollage){
-      State = DECOLLAGE;
+      State = LIFTOFF;
     }
 
     do{
@@ -75,13 +82,13 @@ void loop() {
     //ligne lift-off sur memoire
     sd.printState(2);
     
-    unsigned long T_liftoff = millis();
+    T_liftoff = millis();
     State = ASCENT;
     break;
   case ASCENT:
     //enregistrement 100Hz
-    unsigned long deltaT = 10000;//intervalle d'un cycle en microsecondes
-    unsigned long beginTime = micros();
+    deltaT = 10000;//intervalle d'un cycle en microsecondes
+    beginTime = micros();
     
     //lire capteur
     mpu.recordData(&d);  // mpu.printdata(&d);
@@ -94,10 +101,10 @@ void loop() {
     //detection apogee
 
     //fail détection:
-    unsigned long T_ascent = 20000; //20sec de montée max ?
+    T_ascent = 20000; //20sec de montée max ?
     if(millis() > T_ascent+T_liftoff){
       //écrire le fail dans mémoire+SD
-      State = DESCENT;
+      State = DESCENT1;
     }
 
     do{
@@ -112,8 +119,8 @@ void loop() {
     break;
   case DESCENT1:
     //enregistrement 100Hz
-    unsigned long deltaT = 10000; //intervalle d'un cycle en microsecondes
-    unsigned long beginTime = micros();
+    deltaT = 10000; //intervalle d'un cycle en microsecondes
+    beginTime = micros();
     
     //lire capteur
     mpu.recordData(&d);  // mpu.printdata(&d);
@@ -135,8 +142,8 @@ void loop() {
     break;
   case DESCENT2:
     //enregistrement 100Hz
-    unsigned long deltaT = 10000;//intervalle d'un cycle en microsecondes
-    unsigned long beginTime = micros();
+    deltaT = 10000;//intervalle d'un cycle en microsecondes
+    beginTime = micros();
     
     //lire capteur 
     mpu.recordData(&d);  // mpu.printdata(&d);
