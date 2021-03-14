@@ -1,9 +1,5 @@
 #include <Arduino.h>
 #include "SDCard.h"
-#include <SD.h>
-#include <SPI.h>
-
-const int chipSelect = BUILTIN_SDCARD;
 
 void SDCard::setupSDCard(){
   //Serial.print("Initializing SD card...");
@@ -19,7 +15,7 @@ void SDCard::setupSDCard(){
   }
 
 void SDCard::createFile(){
-  File dataFile = SD.open("data.csv", FILE_WRITE);
+  dataFile = SD.open("data.csv", FILE_WRITE);
   String dataString = "Altitude,OrientationX,OrientationY,OrientationZ,AccelerationX,AccelerationY,AccelerationZ,Temperature,Battery,";
   if(dataFile){
     dataFile.println(dataString);
