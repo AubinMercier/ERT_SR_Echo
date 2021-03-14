@@ -16,14 +16,15 @@ void SDCard::setupSDCard(){
 
 void SDCard::createFile(){
   dataFile = SD.open("data.csv", FILE_WRITE);
-  String dataString = "Altitude,OrientationX,OrientationY,OrientationZ,AccelerationX,AccelerationY,AccelerationZ,Temperature,Battery,";
+  String dataString = "Time,Altitude,OrientationX,OrientationY,OrientationZ,AccelerationX,AccelerationY,AccelerationZ,Temperature,Battery,";
   if(dataFile){
     dataFile.println(dataString);
   }
-  }
+}
 
-void SDCard::printData (Data * d){
-  String dataString = d->altitude + ",";
+void SDCard::printData (unsigned long t, Data * d){
+  String dataString = String(t)+ ",";
+  dataString += String(d->altitude)+ ",";
   for(int i=0 ; i<3 ; ++i)        //request gyr data from MPU
     dataString += String(d->orientation[i])+ ",";
   for(int i=0 ; i<3 ; ++i)        //request acc data
@@ -37,11 +38,18 @@ void SDCard::printData (Data * d){
     //Serial.println(dataString);
   }  
   // if the file isn't open, pop up an error:
-  else {
+  //else {
     //Serial.println("error opening datalog.txt");
-  }  
+  //}  
+}
+
+void SDCard::printState(int state){
+  String dataString = String(state)+",0,0,0,0,0,0,0,0,0,";
+  if(dataFile){
+    dataFile.println(dataString);
+  }
 }
 
 void SDCard::closeFile(){
   dataFile.close();
-  }
+}
